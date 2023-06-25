@@ -1,0 +1,33 @@
+body {
+  background-color: #181818;
+}
+
+.task-list {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+.task-list h2 {
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.task-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.task-list li {
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.task-icon {
+  margin-right: 10px;
+}
