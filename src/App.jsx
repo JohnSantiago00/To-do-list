@@ -7,8 +7,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import "./index.css";
-
 const TodoList = () => {
   const [tasks, setTasks] = useState([]);
 
@@ -36,38 +34,47 @@ const TodoList = () => {
   };
 
   return (
-    <div className="task-list">
-      <h2>Win The Day!</h2>
-      {tasks.length === 0 ? (
-        <p className="no-tasks">
-          No tasks available. Add a task to get started!
-        </p>
-      ) : (
-        <ul>
-          {tasks.map((task) => (
-            <li
-              key={task.id}
-              className={`task-item ${task.completed ? "completed" : ""}`}
-              onClick={() => toggleTask(task.id)}
-            >
-              <span className="task-icon">
-                <FontAwesomeIcon
-                  icon={task.completed ? "check-circle" : "circle"}
-                />
-              </span>
-              <span className="task-title">{task.title}</span>
-              <span className="delete-icon" onClick={() => deleteTask(task.id)}>
-                <FontAwesomeIcon icon="trash" />
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-      <TaskForm addTask={addTask} />
+    <div className="task-list bg-gray-800">
+      <div className="max-w-md mx-auto p-4 bg-gray-800">
+        <h2 className="text-center text-white text-2xl font-bold mb-5">
+          Win The Day!
+        </h2>
+        {tasks.length === 0 ? (
+          <p className="text-white my-4">
+            No tasks available. Add a task to get started!
+          </p>
+        ) : (
+          <ul>
+            {tasks.map((task) => (
+              <li
+                key={task.id}
+                className={`flex items-center mb-2 p-2 rounded ${
+                  task.completed ? "bg-gray-300" : "bg-white"
+                }`}
+                onClick={() => toggleTask(task.id)}
+              >
+                <span className="mr-2">
+                  <FontAwesomeIcon
+                    icon={task.completed ? "check-circle" : "circle"}
+                    className="text-blue-500"
+                  />
+                </span>
+                <span className="flex-grow">{task.title}</span>
+                <span
+                  className="cursor-pointer"
+                  onClick={() => deleteTask(task.id)}
+                >
+                  <FontAwesomeIcon icon="trash" className="text-red-500" />
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <TaskForm addTask={addTask} />
+      </div>
     </div>
   );
 };
-
 const TaskForm = ({ addTask }) => {
   const [title, setTitle] = useState("");
 
@@ -80,15 +87,18 @@ const TaskForm = ({ addTask }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="flex mt-5">
       <input
-        className="submit-Box"
+        className="bg-gray-200 flex-grow rounded-l py-2 px-3 mr-2"
         type="text"
-        placeholder=" Enter task"
+        placeholder="Enter task"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <button className="submit-Btn" type="submit">
+      <button
+        className="bg-blue-500 text-white py-2 px-4 rounded-r"
+        type="submit"
+      >
         Add
       </button>
     </form>
