@@ -6,11 +6,18 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 const TodoList = () => {
   const [tasks, setTasks] = useState([]);
 
   library.add(faCheckCircle, faCircle, faTrash);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/tasks")
+      .then((response) => response.json())
+      .then((data) => setTasks(data));
+  }, []);
 
   const addTask = (title) => {
     const newTask = {
@@ -19,6 +26,14 @@ const TodoList = () => {
       completed: false,
     };
     setTasks([...tasks, newTask]);
+
+    fetch("http://localhost:3000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTask),
+    });
   };
 
   const toggleTask = (taskId) => {
@@ -31,6 +46,10 @@ const TodoList = () => {
 
   const deleteTask = (taskId) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+
+    fetch(`http://localhost:3000/tasks/${taskId}`, {
+      method: "DELETE",
+    });
   };
 
   return (
@@ -75,6 +94,7 @@ const TodoList = () => {
     </div>
   );
 };
+
 const TaskForm = ({ addTask }) => {
   const [title, setTitle] = useState("");
 
