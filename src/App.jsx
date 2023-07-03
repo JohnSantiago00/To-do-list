@@ -2,16 +2,18 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCheckCircle,
   faCircle,
+  faEdit,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const TodoList = () => {
   const [tasks, setTasks] = useState([]);
 
-  library.add(faCheckCircle, faCircle, faTrash);
+  library.add(faCheckCircle, faCircle, faTrash, faEdit);
 
   useEffect(() => {
     fetch("http://localhost:3000/tasks")
@@ -20,10 +22,14 @@ const TodoList = () => {
   }, []);
 
   const addTask = (title) => {
+    const currentDate = new Date();
     const newTask = {
       id: tasks.length + 1,
       title,
       completed: false,
+      dateCreated: currentDate.toLocaleDateString(),
+      timeCreated: currentDate.toLocaleTimeString(),
+      status: false,
     };
     setTasks([...tasks, newTask]);
 
@@ -39,7 +45,7 @@ const TodoList = () => {
   const toggleTask = (taskId) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
+        task.id === taskId ? { ...task, status: !task.status } : task
       )
     );
   };
@@ -68,23 +74,28 @@ const TodoList = () => {
               <li
                 key={task.id}
                 className={`flex items-center mb-2 p-2 rounded ${
-                  task.completed ? "bg-gray-300" : "bg-white"
-                }`}
-                onClick={() => toggleTask(task.id)}
+                  task.status ? "bg-gray-300" : "bg-white"
+                } ${task.status ? "line-through" : ""}`}
               >
                 <span className="mr-2">
                   <FontAwesomeIcon
-                    icon={task.completed ? "check-circle" : "circle"}
+                    icon={task.status ? "check-circle" : "circle"}
                     className="text-blue-500"
+                    onClick={() => toggleTask(task.id)}
                   />
                 </span>
-                <span className="flex-grow">{task.title}</span>
+                <span className="flex-grow">
+                  <span>{task.title}</span>
+                </span>
                 <span
-                  className="cursor-pointer"
+                  className="cursor-pointer mx-2"
                   onClick={() => deleteTask(task.id)}
                 >
                   <FontAwesomeIcon icon="trash" className="text-red-500" />
                 </span>
+                <Link to={`/details/${task.id}`}>
+                  <FontAwesomeIcon icon="edit" className="text-blue-500" />
+                </Link>
               </li>
             ))}
           </ul>
