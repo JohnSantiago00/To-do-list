@@ -18,7 +18,16 @@ const TodoList = () => {
   useEffect(() => {
     fetch("http://localhost:3000/tasks")
       .then((response) => response.json())
-      .then((data) => setTasks(data));
+      .then((data) => {
+        const updatedTasks = data.map((task) => {
+          const taskStatus = localStorage.getItem(`taskStatus-${task.id}`);
+          return {
+            ...task,
+            status: taskStatus ? JSON.parse(taskStatus) : false,
+          };
+        });
+        setTasks(updatedTasks);
+      });
   }, []);
 
   const addTask = (title) => {
@@ -43,11 +52,26 @@ const TodoList = () => {
   };
 
   const toggleTask = (taskId) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, status: !task.status } : task
-      )
-    );
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === taskId) {
+        const updatedTask = { ...task, status: !task.status };
+        fetch(`http://localhost:3000/tasks/${taskId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: updatedTask.status }),
+        });
+        localStorage.setItem(
+          `taskStatus-${taskId}`,
+          JSON.stringify(updatedTask.status)
+        );
+        return updatedTask;
+      }
+      return task;
+    });
+
+    setTasks(updatedTasks);
   };
 
   const deleteTask = (taskId) => {
@@ -56,6 +80,7 @@ const TodoList = () => {
     fetch(`http://localhost:3000/tasks/${taskId}`, {
       method: "DELETE",
     });
+    localStorage.removeItem(`taskStatus-${taskId}`);
   };
 
   return (

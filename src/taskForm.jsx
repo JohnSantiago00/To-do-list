@@ -1,32 +1,43 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-const TaskForm = ({ addTask }) => {
+const TaskForm = ({ onAddTask }) => {
   const [title, setTitle] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title.trim() !== "") {
-      addTask(title);
-      setTitle("");
-    }
+
+    const currentDate = new Date();
+    const newTask = {
+      id: currentDate.getTime(),
+      title,
+      completed: false,
+      dateCreated: currentDate.toLocaleDateString(),
+      timeCreated: currentDate.toLocaleTimeString(),
+      status: false,
+    };
+
+    localStorage.setItem(`task-${newTask.id}`, JSON.stringify(newTask));
+    onAddTask(newTask);
+    setTitle("");
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Add a task"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        placeholder="Enter task title"
+        required
       />
-      <button type="submit">Add</button>
+      <button type="submit">Add Task</button>
     </form>
   );
 };
 
 TaskForm.propTypes = {
-  addTask: PropTypes.func.isRequired,
+  onAddTask: PropTypes.func.isRequired,
 };
 
 export default TaskForm;
