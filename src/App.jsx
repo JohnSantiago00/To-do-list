@@ -1,3 +1,10 @@
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Title: To-Do List
+// Developer: John Santiago
+// Date : 07/06/23
+// Description: A To-Do List displaying a list of tasks
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCheckCircle,
@@ -15,6 +22,12 @@ const TodoList = () => {
 
   library.add(faCheckCircle, faCircle, faTrash, faEdit);
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Name: useEffect
+  // Purpose: Fetches tasks from the server when the component mounts
+  // Input: Function, dependency array
+  // Output: None
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   useEffect(() => {
     fetch("http://localhost:3000/tasks")
       .then((response) => response.json())
@@ -30,6 +43,12 @@ const TodoList = () => {
       });
   }, []);
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Name: addTask
+  // Purpose: Adds a new task to the task list
+  // Input: String (task title)
+  // Output: None
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const addTask = (title) => {
     const currentDate = new Date();
     const newTask = {
@@ -42,6 +61,7 @@ const TodoList = () => {
     };
     setTasks([...tasks, newTask]);
 
+    // Save the new task to the server
     fetch("http://localhost:3000/tasks", {
       method: "POST",
       headers: {
@@ -51,6 +71,12 @@ const TodoList = () => {
     });
   };
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Name: toggleTask
+  // Purpose: Toggles the status of a task
+  // Input: Number (task ID)
+  // Output: None
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const toggleTask = (taskId) => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
@@ -74,6 +100,12 @@ const TodoList = () => {
     setTasks(updatedTasks);
   };
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Name: deleteTask
+  // Purpose: Deletes a task from the task list
+  // Input: Number (task ID)
+  // Output: None
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const deleteTask = (taskId) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
 

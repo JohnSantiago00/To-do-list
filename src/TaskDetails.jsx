@@ -10,6 +10,12 @@ const TaskDetails = () => {
   const [updatedTitle, setUpdatedTitle] = useState("");
   const [status, setStatus] = useState(false);
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Name: useEffect
+  // Purpose: Fetches the task details from the server when the component mounts
+  // Input: None
+  // Output: None
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   useEffect(() => {
     fetch(`http://localhost:3000/tasks/${id}`)
       .then((response) => response.json())
@@ -32,9 +38,7 @@ const TaskDetails = () => {
 
     setTask(updatedTask);
 
-    localStorage.setItem(`task-${id}`, JSON.stringify(updatedTask));
-    localStorage.setItem(`taskStatus-${id}`, JSON.stringify(status));
-
+    // Update the task on the server
     fetch(`http://localhost:3000/tasks/${id}`, {
       method: "PATCH",
       headers: {
@@ -45,11 +49,22 @@ const TaskDetails = () => {
 
     setEditing(false);
   };
-
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Name: handleInputChange
+  // Purpose: Handles the input change event and updates the updatedTitle state
+  // Input: Event object
+  // Output: None
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const handleInputChange = (e) => {
     setUpdatedTitle(e.target.value);
   };
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Name: handleKeyDown
+  // Purpose: Handles the keydown event and calls handleSave() when the Enter key is pressed
+  // Input: Event object
+  // Output: None
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSave();
