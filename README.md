@@ -1,4 +1,4 @@
-# Todo List App
+# To-do List App
 
 This is a Todo List application built with React. It allows users to create tasks, mark them as complete or incomplete, edit task titles, and delete tasks.
 
