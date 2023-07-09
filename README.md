@@ -18,11 +18,11 @@ This is a Todo List application built with React. It allows users to create task
    git clone <repository-url>
 
 2. install dependencies:
-
+   ```bash
    npm install
 
 3. Start the development server:
-
+   ```bash
    npm start
 
 The app will be running at http://localhost:3000.
